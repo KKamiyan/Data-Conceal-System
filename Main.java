@@ -39,37 +39,38 @@ public class Main {
     
     static void encrypt(Path filePath,int idSystem){
         
-        String encryptedFilesPath = idSystem + "test.txt";
-        System.out.println("filename: " + encryptedFilesPath);
+        String encryptedFilesPath = idSystem + "test.aes";
+        System.out.println(filePath + " to: " + encryptedFilesPath);
         Path file = Paths.get(encryptedFilesPath);
 
 
 
         System.out.println("Encrypting file...");
         try{
-            FileWriter writer = new FileWriter(idSystem + "test.txt", true);
+            FileWriter writer = new FileWriter(idSystem + "test.aes", true);
 
 
-            System.out.println("1");
+            System.out.println("10%");
             byte[] fileData = Files.readAllBytes(filePath);
-            System.out.println("2");
+            System.out.println("20%");
             KeyGenerator genKey = KeyGenerator.getInstance("AES");
-            System.out.println("3");
+            System.out.println("30%");
             genKey.init(128);
             SecretKey key = genKey.generateKey();
-            System.out.println("4");
+            System.out.println("40%");
             Cipher encrypt = Cipher.getInstance("AES");
             encrypt.init(Cipher.ENCRYPT_MODE, key);
-            System.out.println("5");
+            System.out.println("50%");
             byte[] encryptedFile = encrypt.doFinal(fileData);
-            System.out.println("6");
+            System.out.println("60%");
 
 
 
 
             Files.write(file, encryptedFile);
-            System.out.println("7");
+            System.out.println("70%\n...\n100%");
             System.out.println("File encrypted successfully!");
+            System.out.println("Encrypted file path: " + file.toAbsolutePath().toString());
         } catch (Exception e) {
             System.out.println("Something went wrong...");
         }
@@ -82,8 +83,13 @@ public class Main {
 
     static Path getFile(){
         String filePath = "README.md";
-        System.out.print("Enter the file path: ");
-        filePath = scanner.nextLine();
+        System.out.print("Enter the file path ");
+
+        do {
+            System.out.print(": ");
+            filePath = scanner.nextLine();
+        } while (filePath.isEmpty());
+        
         Path file = Paths.get(filePath);
         
         return file;
@@ -101,10 +107,11 @@ public class Main {
             BufferedReader bufferedReader = new BufferedReader(reader);
             
             while ((line = bufferedReader.readLine()) != null) {
-                System.out.printf("ID: %06d\n", count);
+                
                 count++;
 
             }
+            System.out.printf("Conversion ID: %06d\n", count);
             
             bufferedReader.close();
 
@@ -115,7 +122,7 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Something went wrong...");
         }
-        return count + 1;
+        return count;
     }
 
     static void test(){
